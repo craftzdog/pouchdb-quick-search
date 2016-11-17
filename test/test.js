@@ -1,7 +1,7 @@
 /*jshint expr:true */
 'use strict';
 
-var Pouch = require('pouchdb');
+var Pouch = require('pouchdb-memory');
 var uniq = require('uniq');
 
 //
@@ -21,14 +21,14 @@ require('bluebird'); // var Promise = require('bluebird');
 
 // have to make this global for the languages plugin, sadly
 global.lunr = require('lunr');
-require('./deps/lunr.stemmer.support');
-require('./deps/lunr.fr');
-
+require('./deps/lunr.stemmer.support')(global.lunr);
+require('./deps/lunr.fr')(global.lunr);
+require('./deps/lunr.multi')(global.lunr);
 var dbs;
 if (process.browser) {
   dbs = 'testdb' + Math.random();
 } else {
-  dbs = process.env.TEST_DB;
+  dbs = process.env.TEST_DB || 'testdb';
 }
 
 dbs.split(',').forEach(function (db) {
@@ -49,16 +49,17 @@ function tests(dbName, dbType) {
 
   var db;
 
-  beforeEach(function () {
-    db = new Pouch(dbName);
-    return db;
-  });
-  afterEach(function () {
-    return db.destroy();
-  });
   describe(dbType + ': search test suite', function () {
     this.timeout(30000);
-    
+
+    beforeEach(function () {
+      db = new Pouch(dbName);
+      return db;
+    });
+    afterEach(function () {
+      return db.destroy();
+    });
+
     it('basic search', function () {
       return db.bulkDocs({docs: docs}).then(function () {
         var opts = {
@@ -99,12 +100,12 @@ function tests(dbName, dbType) {
     });
 
     it('basic search - ordering', function () {
-      
+
       // the word "court" is used once in the first doc,
       // twice in the second, and twice in the third,
       // but the third is longest, so tf-idf should give us
       // 2 3 1
-      
+
       return db.bulkDocs({docs: docs}).then(function () {
         var opts = {
           fields: ['title', 'text', 'desc'],
@@ -672,6 +673,30 @@ function tests(dbName, dbType) {
       }).then(function (res) {
         var ids = res.rows.map(function (x) { return x.id; });
         ids.should.deep.equal(['2']);
+        return db.search({
+          fields: ['text'],
+          query: 'parlera',
+          language: ['en','fr']
+        });
+      }).then(function(res) {
+        var ids = res.rows.map(function (x) { return x.id; });
+        ids.should.deep.equal(['2']);
+        return db.search({
+          fields: ['text'],
+          query: 'spleen',
+          language: ['en','fr']
+        });
+      }).then(function(res) {
+        var ids = res.rows.map(function (x) { return x.id; }).sort();
+        ids.should.deep.equal(['1', '2']);
+        return db.search({
+          fields: ['text'],
+          query: 'works',
+          language: ['en','fr']
+        });
+      }).then(function(res) {
+        var ids = res.rows.map(function (x) { return x.id; }).sort();
+        ids.should.deep.equal(['3']);
       });
     });
 

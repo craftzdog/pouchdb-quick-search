@@ -80,6 +80,7 @@ API
 * [Deleting the index](#deleting-the-index)
 * [Stale queries](#stale-queries)
 * [Other languages](#other-languages)
+* [Multi-language search](#multi-language-search)
 * [Autosuggestions and prefix search](#autosuggestions-and-prefix-search)
 
 
@@ -535,6 +536,25 @@ pouch.search({
 If you don't specify a `language`, then the default is `'en'`. Under the hood, separate external databases will be created per language (and per `fields` definition), so you may want to keep that in mind if you're using the `destroy` and `build` options.
 
 **Note:** currently the lunr-languages plugin expects a global `lunr` object, so unfortunately you will have to include lunr as an extra dependency in your project and assign it to global (as described in the lunr-languages instructions).  Hopefully this will be fixed in the future.
+
+### Multi-language search
+
+Recently `lunr-languages` developers have added the ability to search in multiple languages at once. To be able to search from several languages:
+
+1) You should include `lunr.multi.js` from the `lunr-languages` repository. (Currently it is available only on master; they haven't tagged a release). 
+
+2) Pass an array into `language`, for example:
+
+```js
+pouch.search({
+  query: 'marche', 
+  fields: ['text'], 
+  include_docs: true,
+  language: ['en', 'fr']
+});
+```
+
+The above code will search using both French and English.
 
 ### Autosuggestions and prefix search
 
