@@ -39,7 +39,7 @@
     "lunr": "0.7.1",
     "md5-jkmyers": "0.0.1",
     "pouchdb-extend": "^0.1.0",
-    "pouchdb-mapreduce-no-ddocs": "^2.3.2",
+    "pouchdb-mapreduce-no-ddocs": "github:noradaiko/pouchdb-mapreduce-no-ddocs",
     "pouchdb-promise": "5.4.4",
     "uniq": "^1.0.1"
   },
