@@ -1,6 +1,6 @@
 {
   "name": "@craftzdog/pouchdb-quick-search",
-  "version": "1.3.2",
+  "version": "1.3.3",
   "description": "PouchDB Quick Search - persisted full-text search for PouchDB",
   "main": "lib/index.js",
   "repository": {
