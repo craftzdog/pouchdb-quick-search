@@ -67,5 +67,8 @@
   "lib": [
     "lib",
     "dist"
-  ]
+  ],
+  "react-native": {
+    "crypto": false
+  }
 }
