@@ -32,6 +32,7 @@
     "coverage": "npm test --coverage && istanbul check-coverage --lines 100 --function 100 --statements 100 --branches 100"
   },
   "dependencies": {
+    "@craftzdog/pouchdb-mapreduce-no-ddocs": "^2.3.2",
     "argsarray": "0.0.1",
     "es3ify": "^0.2.2",
     "inherits": "~2.0.1",
@@ -40,7 +41,6 @@
     "lunr": "0.7.1",
     "md5-jkmyers": "0.0.1",
     "pouchdb-extend": "^0.1.0",
-    "pouchdb-mapreduce-no-ddocs": "github:craftzdog/pouchdb-mapreduce-no-ddocs",
     "pouchdb-promise": "5.4.4",
     "uniq": "^1.0.1"
   },
